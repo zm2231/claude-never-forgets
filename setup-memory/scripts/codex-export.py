@@ -216,7 +216,13 @@ def main():
     )
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--transcript", help="Path to a single rollout JSONL file")
-    group.add_argument("--backfill", help="Codex sessions dir, recursive (default: $CODEX_HOME/sessions)")
+    group.add_argument(
+        "--backfill",
+        nargs="?",
+        const=str(CODEX_SESSIONS),
+        default=None,
+        help="Codex sessions dir, recursive (omit value for $CODEX_HOME/sessions)",
+    )
     args = parser.parse_args()
 
     VAULT_DIR.mkdir(parents=True, exist_ok=True)

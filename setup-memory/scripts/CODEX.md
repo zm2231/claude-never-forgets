@@ -32,6 +32,7 @@ during a single session. Periodic backfill is the right model: export changed
 sessions and index once per interval.
 
 ```bash
+mkdir -p ~/.codex/hooks
 cp setup-memory/scripts/codex-export.py ~/.codex/hooks/
 python3 ~/.codex/hooks/codex-export.py --backfill   # defaults to $CODEX_HOME/sessions
 qmd update && qmd embed
@@ -40,3 +41,17 @@ qmd update && qmd embed
 launchd example (every 10 min): run the two commands above from a
 `StartInterval = 600` agent. mtime dedup means each run only rewrites the
 sessions that actually changed.
+
+## Recall from Codex
+
+So Codex can search the shared vault the same way Claude Code does, install the
+Codex `recall` skill. It's a thin adapter over the same `~/.claude/vault/`, with
+Codex-flavored triggers.
+
+```bash
+mkdir -p ~/.codex/skills
+cp -r setup-memory/assets/recall-skill-codex ~/.codex/skills/recall
+```
+
+Then ask Codex things like "recall what we decided about auth" or "find the
+session where we fixed the export dedup". It runs `qmd` and reads the top hits.
